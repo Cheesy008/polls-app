@@ -153,7 +153,7 @@ class UserPollResponse(models.Model):
 
 class UserQuestionResponse(models.Model):
     """
-    Модель, в которой пользователь связаны с вопросом.
+    Модель, в которой пользователь связан с вопросом.
     """
 
     user = models.ForeignKey(
