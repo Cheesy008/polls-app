@@ -6,12 +6,18 @@ from django.core.exceptions import ValidationError
 
 
 class PollManager(models.Manager):
-    def active_polls(self):
+    def active(self):
         """
         Возвращает queryset активных опросов.
         """
         utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
         return self.get_queryset().filter(end_date__gt=utc_now)
+
+    def find_active_by_id(self, id):
+        """
+        Возвращает queryset активных опросов, найденных по id.
+        """
+        return self.active().filter(id=id)
 
 
 class Poll(models.Model):
@@ -128,7 +134,7 @@ class UserPollResponse(models.Model):
     """
     Модель, в которой пользователь связан с опросом.
     """
-    
+
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
@@ -141,7 +147,7 @@ class UserPollResponse(models.Model):
         related_name="+",
         verbose_name="Опрос",
     )
-    
+
     class Meta:
         verbose_name = "Данные об опросе, на который отвечает пользователь"
         verbose_name_plural = "Данные об опросах, на которые отвечает пользователь"
@@ -178,14 +184,18 @@ class UserQuestionResponse(models.Model):
 
     def clean(self) -> None:
         if self.question.question_type != Question.TEXT and self.answer_text:
-            raise ValidationError({"error": f"В вопросе с id {self.question.id} своим текстом запрещён"})
+            raise ValidationError(
+                {"error": f"В вопросе с id {self.question.id} своим текстом запрещён"}
+            )
 
         user_answers_count = self.user.user_question_responses.filter(
             question=self.question
         ).count()
 
         if user_answers_count >= 1:
-            raise ValidationError({"error": f"Вы уже отвечали на вопрос с id {self.question.id}"})
+            raise ValidationError(
+                {"error": f"Вы уже отвечали на вопрос с id {self.question.id}"}
+            )
 
         return super().clean()
 

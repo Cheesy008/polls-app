@@ -116,7 +116,7 @@ class SendUserAnswerSerializer(serializers.Serializer):
         answer_text = attrs.get("answer_text", None)
         poll_id = self.context["poll_id"]
 
-        poll = Poll.objects.active_polls().filter(id=poll_id).first()
+        poll = Poll.objects.find_active_by_id(poll_id).first()
         if not poll:
             raise ValidationError({"error": "Опрос не был найден в списке активных"})
 

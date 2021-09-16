@@ -30,7 +30,7 @@ class PollsViewSet(ApiErrorsMixin, viewsets.ModelViewSet):
         # если пользователь не является админом, то выводим только активные опросы
         if self.request.user.is_superuser:
             return Poll.objects.all()
-        return Poll.objects.active_polls()
+        return Poll.objects.active()
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
