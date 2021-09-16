@@ -1,0 +1,16 @@
+.env
+*.code-workspace
+.vscode/
+.idea/
+venv/
+__pycache__/
+*.pyc
+staticfiles/*
+generated_files/*.pdf
+generated_files/*.xlsx
+.DS_Store
+*.ipynb
+pg_data*/
+redis_data*/
+static*/
+media*/
