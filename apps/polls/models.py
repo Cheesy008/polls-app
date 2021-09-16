@@ -3,10 +3,6 @@ from datetime import datetime
 
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.contrib.auth import get_user_model
-
-
-User = get_user_model()
 
 
 class PollManager(models.Manager):
@@ -28,7 +24,7 @@ class Poll(models.Model):
     start_date = models.DateTimeField("Время начала опроса")
     end_date = models.DateTimeField("Время окончания опроса")
     created_by = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.CASCADE,
         related_name="polls",
         verbose_name="Пользователь",
@@ -134,7 +130,7 @@ class UserPollResponse(models.Model):
     """
     
     user = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.CASCADE,
         related_name="user_poll_responses",
         verbose_name="Пользователь",
@@ -157,7 +153,7 @@ class UserQuestionResponse(models.Model):
     """
 
     user = models.ForeignKey(
-        User,
+        "users.User",
         on_delete=models.CASCADE,
         related_name="user_question_responses",
         verbose_name="Пользователь",
